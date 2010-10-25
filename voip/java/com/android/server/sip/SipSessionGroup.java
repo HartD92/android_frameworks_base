@@ -528,11 +528,14 @@ class SipSessionGroup implements SipListener {
         }
 
         public void answerCall(String sessionDescription, int timeout) {
-            try {
-                processCommand(new MakeCallCommand(mPeerProfile,
-                        sessionDescription, timeout));
-            } catch (SipException e) {
-                onError(e);
+            synchronized (SipSessionGroup.this) {
+                if (mPeerProfile == null) return;
+                try {
+                    processCommand(new MakeCallCommand(mPeerProfile,
+                            sessionDescription, timeout));
+                } catch (SipException e) {
+                    onError(e);
+                }
             }
         }
 
@@ -541,14 +544,11 @@ class SipSessionGroup implements SipListener {
         }
 
         public void changeCall(String sessionDescription, int timeout) {
-            doCommandAsync(new MakeCallCommand(mPeerProfile, sessionDescription,
-                    timeout));
-        }
-
-        public void changeCallWithTimeout(
-                String sessionDescription, int timeout) {
-            doCommandAsync(new MakeCallCommand(mPeerProfile, sessionDescription,
-                    timeout));
+            synchronized (SipSessionGroup.this) {
+                if (mPeerProfile == null) return;
+                doCommandAsync(new MakeCallCommand(mPeerProfile,
+                        sessionDescription, timeout));
+            }
         }
 
         public void register(int duration) {
