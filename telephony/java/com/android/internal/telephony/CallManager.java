@@ -860,6 +860,8 @@ public final class CallManager {
     public boolean getMute() {
         if (hasActiveFgCall()) {
             return getActiveFgCall().getPhone().getMute();
+        } else if (hasActiveBgCall()) {
+            return getFirstActiveBgCall().getPhone().getMute();
         }
         return false;
     }
