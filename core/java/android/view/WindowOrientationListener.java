@@ -357,9 +357,6 @@ public abstract class WindowOrientationListener {
             float deviation = Math.abs(magnitude - SensorManager.STANDARD_GRAVITY);
 
             handleAccelerationDistrust(deviation);
-            if (magnitude < MIN_ABS_ACCELERATION) {
-                return; // Ignore tilt and orientation when (0, 0, 0) or low reading
-            }
 
             // only filter tilt when we're accelerating
             float alpha = 1;
